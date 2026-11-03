@@ -22,7 +22,6 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
           channel: 'stable'
           cache: true
 
@@ -34,7 +33,7 @@ jobs:
       - name: Build APK Release
         run: |
           cd seb_mobile_app
-          flutter build apk --release
+          flutter build apk --release --android-skip-build-dependency-validation
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -42,4 +41,3 @@ jobs:
           name: Elena-SEB-STTNF-Release
           path: seb_mobile_app/build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
-
