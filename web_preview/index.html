@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulator Interaktif Elena SEB Mobile - STT Terpadu Nurul Fikri</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      max-width: 800px;
+    }
+    header h1 {
+      font-size: 24px;
+      color: #f59e0b;
+      margin-bottom: 6px;
+    }
+    header p {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      gap: 32px;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      max-width: 1100px;
+      flex-wrap: wrap;
+    }
+
+    /* Device Mockup */
+    .device-wrapper {
+      position: relative;
+      width: 380px;
+      height: 760px;
+      background: #000;
+      border-radius: 46px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Notch / Island */
+    .device-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 25px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 999;
+    }
+
+    /* Device Screen */
+    .device-screen {
+      flex: 1;
+      background: #f8fafc;
+      color: #0f172a;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Screens */
+    .app-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      background: #f8fafc;
+      overflow-y: auto;
+    }
+    .app-screen.active {
+      display: flex;
+    }
+
+    /* Home Screen Styles */
+    .home-header {
+      padding: 42px 18px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-icon {
+      background: #092540;
+      color: #f59e0b;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .brand-text h2 {
+      font-size: 16px;
+      color: #092540;
+      font-weight: 800;
+    }
+    .brand-text span {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .home-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .hero-card {
+      background: linear-gradient(135deg, #092540, #0d47a1);
+      color: #fff;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(13, 71, 161, 0.25);
+    }
+    .hero-tag {
+      display: inline-block;
+      background: #f59e0b;
+      color: #092540;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .hero-card h3 {
+      font-size: 18px;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+    .hero-card p {
+      font-size: 11px;
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+
+    .btn-primary {
+      background: #0d47a1;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.2);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover {
+      background: #0a3880;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-secondary {
+      flex: 1;
+      background: #fff;
+      color: #092540;
+      border: 1px solid #cbd5e1;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #f1f5f9;
+    }
+
+    .checklist-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .checklist-card h4 {
+      font-size: 13px;
+      color: #092540;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .check-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: #475569;
+    }
+    .check-item i {
+      color: #16a34a;
+      margin-top: 2px;
+    }
+
+    /* Exam Screen */
+    .exam-topbar {
+      background: #092540;
+      color: #fff;
+      padding: 38px 12px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    .seb-badge {
+      background: #f59e0b;
+      color: #092540;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .exam-title {
+      flex: 1;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .violation-pill {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .violation-pill.danger {
+      background: #dc2626;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+    .btn-exam-action {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+    }
+    .btn-exit-exam {
+      background: #dc2626;
+      color: #fff;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .exam-webview {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    /* Modals / Alerts inside device */
+    .device-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+    .device-modal.active {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      color: #0f172a;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .modal-box h3 {
+      font-size: 16px;
+      color: #092540;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-box p {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+    .pin-input {
+      width: 100%;
+      padding: 10px;
+      font-size: 20px;
+      letter-spacing: 6px;
+      text-align: center;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: #f8fafc;
+      font-weight: bold;
+    }
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .modal-btns button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Screen Capture Overlay (Blackout FLAG_SECURE) */
+    .screen-blackout {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      text-align: center;
+      padding: 20px;
+    }
+    .screen-blackout.active {
+      display: flex;
+    }
+
+    /* Control Panel Outside Device */
+    .control-panel {
+      flex: 1;
+      min-width: 320px;
+      max-width: 480px;
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #334155;
+    }
+    .control-panel h2 {
+      font-size: 18px;
+      color: #f59e0b;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .control-panel p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .sim-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sim-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sim-btn:hover {
+      background: #475569;
+      border-color: #f59e0b;
+    }
+    .sim-btn span.badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #f59e0b;
+    }
+
+    .log-box {
+      margin-top: 20px;
+      background: #0f172a;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #10b981;
+      max-height: 140px;
+      overflow-y: auto;
+      border: 1px solid #334155;
+    }
+
+    /* QR Code Screen inside device */
+    .qr-screen {
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      height: 100%;
+    }
+    .qr-box {
+      width: 200px;
+      height: 200px;
+      border: 3px solid #f59e0b;
+      border-radius: 16px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    }
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #f59e0b;
+      animation: scanAnim 2s infinite ease-in-out;
+    }
+    @keyframes scanAnim {
+      0% { top: 10%; }
+      50% { top: 90%; }
+      100% { top: 10%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Simulator Interaktif: Elena Safe Exam Browser (SEB)</h1>
+    <p>Simulasi alur aplikasi Android & iOS untuk LMS Moodle STT Terpadu Nurul Fikri (elena.nurulfikri.ac.id)</p>
+  </header>
+
+  <div class="main-container">
+    <!-- Smartphone Mockup -->
+    <div class="device-wrapper">
+      <div class="device-notch"></div>
+      <div class="device-screen">
+        
+        <!-- Screen 1: Home Screen -->
+        <div id="screenHome" class="app-screen active">
+          <div class="home-header">
+            <div class="brand-box">
+              <div class="brand-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              <div class="brand-text">
+                <h2>Elena SEB NF</h2>
+                <span>STT Terpadu Nurul Fikri</span>
+              </div>
+            </div>
+            <button class="btn-exam-action" style="color:#0d47a1;" onclick="openSettingsModal()">
+              <i class="fa-solid fa-gear" style="font-size: 18px;"></i>
+            </button>
+          </div>
+
+          <div class="home-body">
+            <div class="hero-card">
+              <span class="hero-tag">PORTAL UJIAN RESMI STT-NF</span>
+              <h3>Safe Exam Browser<br>Elena LMS Mobile</h3>
+              <p>Browser ujian berkeamanan tinggi untuk UTS & UAS terintegrasi dengan elena.nurulfikri.ac.id</p>
+            </div>
+
+            <button class="btn-primary" onclick="startExam('https://elena.nurulfikri.ac.id')">
+              <i class="fa-solid fa-circle-play" style="color: #f59e0b;"></i>
+              MULAI UJIAN ELENA
+            </button>
+
+            <div class="btn-row">
+              <button class="btn-secondary" onclick="openQrScanner()">
+                <i class="fa-solid fa-qrcode" style="color: #0d47a1;"></i>
+                Scan QR Kuis
+              </button>
+              <button class="btn-secondary" onclick="openCustomUrlDialog()">
+                <i class="fa-solid fa-link" style="color: #0d47a1;"></i>
+                Input URL
+              </button>
+            </div>
+
+            <div class="checklist-card">
+              <h4><i class="fa-solid fa-shield-halved" style="color: #16a34a;"></i> Kesiapan Sistem Perangkat</h4>
+              <div class="check-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span><strong>Proteksi Anti-Screenshot:</strong> FLAG_SECURE Aktif</span>
+              </div>
+              <div class="check-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span><strong>Deteksi Pindah Layar:</strong> Lifecycle Watcher Aktif</span>
+              </div>
+              <div class="check-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span><strong>Koneksi Server:</strong> elena.nurulfikri.ac.id Siap</span>
+              </div>
+              <div class="check-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span><strong>Baterai & Layar:</strong> Wakelock Mencegah Tidur</span>
+              </div>
+            </div>
+
+            <div style="background:#fef3c7; border:1px solid #fde68a; border-radius:12px; padding:12px; font-size:11px; color:#78350f; line-height:1.4;">
+              <strong>⚠️ Tata Tertib:</strong> Dilarang keluar aplikasi selama ujian. 3 kali keluar akan mengunci ujian secara otomatis!
+            </div>
+          </div>
+        </div>
+
+        <!-- Screen 2: Exam WebView Screen -->
+        <div id="screenExam" class="app-screen">
+          <div class="exam-topbar">
+            <span class="seb-badge">SEB NF</span>
+            <div class="exam-title">
+              <i class="fa-solid fa-lock" style="color:#4ade80;"></i>
+              <span id="examUrlDisplay">elena.nurulfikri.ac.id</span>
+            </div>
+            <div id="violationBadge" class="violation-pill">
+              <i class="fa-solid fa-shield"></i>
+              <span id="violationCountText">0/3</span>
+            </div>
+            <button class="btn-exam-action" title="Reload" onclick="reloadExamFrame()">
+              <i class="fa-solid fa-rotate-right"></i>
+            </button>
+            <button class="btn-exit-exam" onclick="requestExitExam()">
+              Keluar
+            </button>
+          </div>
+
+          <!-- Embedded iframe / representation of Elena LMS -->
+          <iframe id="examFrame" class="exam-webview" src="https://elena.nurulfikri.ac.id/login/index.php" title="Elena STT-NF"></iframe>
+        </div>
+
+        <!-- Screen 3: QR Scanner Simulator -->
+        <div id="screenQr" class="app-screen">
+          <div class="qr-screen">
+            <h3 style="margin-bottom:12px; font-size:16px;">Pindai QR Code Ujian</h3>
+            <div class="qr-box">
+              <div class="scan-line"></div>
+              <i class="fa-solid fa-qrcode" style="font-size: 80px; color: #f59e0b; opacity: 0.8;"></i>
+            </div>
+            <p style="font-size:12px; color:#cbd5e1; text-align:center; margin-bottom:20px;">
+              Arahkan kamera ke QR Code resmi kuis Elena dari Dosen Pengawas
+            </p>
+            <button class="btn-primary" style="width:100%;" onclick="simulateQrDetection()">
+              <i class="fa-solid fa-camera"></i>
+              Simulasi QR Terdeteksi
+            </button>
+            <button class="btn-secondary" style="width:100%; margin-top:10px; background:#1e293b; color:#fff;" onclick="closeQrScanner()">
+              Kembali
+            </button>
+          </div>
+        </div>
+
+        <!-- In-App Modal: Proctor PIN Dialog -->
+        <div id="proctorModal" class="device-modal">
+          <div class="modal-box">
+            <h3 id="proctorModalTitle">
+              <i class="fa-solid fa-user-shield" style="color: #0d47a1;"></i>
+              Otorisasi Pengawas
+            </h3>
+            <p id="proctorModalSubtitle">Masukkan PIN Pengawas (Default: 194500) untuk melanjutkan.</p>
+            <input type="password" id="inputProctorPin" class="pin-input" maxlength="8" placeholder="••••••" autofocus />
+            <div id="pinErrorMsg" style="color: #dc2626; font-size: 11px; text-align: center; margin-bottom: 10px; display: none;">
+              PIN Pengawas salah! Silakan coba lagi.
+            </div>
+            <div class="modal-btns">
+              <button id="btnCancelProctor" style="background:#e2e8f0; color:#475569;" onclick="closeProctorModal()">Batal</button>
+              <button style="background:#0d47a1; color:#fff;" onclick="verifyProctorPin()">Verifikasi</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- In-App Modal: Violation Warning -->
+        <div id="violationWarningModal" class="device-modal">
+          <div class="modal-box" style="border-top: 4px solid #dc2626;">
+            <h3 style="color: #dc2626;">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              Peringatan Pelanggaran!
+            </h3>
+            <p id="violationWarningText">Anda terdeteksi keluar dari aplikasi ujian (1/3 kali).</p>
+            <div style="background:#fee2e2; color:#991b1b; padding:8px; border-radius:8px; font-size:11px; margin-bottom:12px;">
+              Dilarang membuka WhatsApp, browser, atau floating apps saat ujian!
+            </div>
+            <button class="btn-primary" style="width:100%; font-size:12px; padding:10px;" onclick="closeViolationWarning()">
+              Saya Mengerti & Lanjutkan
+            </button>
+          </div>
+        </div>
+
+        <!-- Anti-Screenshot Blackout Simulation -->
+        <div id="blackoutOverlay" class="screen-blackout">
+          <i class="fa-solid fa-shield-halved" style="font-size: 48px; color: #f59e0b; margin-bottom: 16px;"></i>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">FLAG_SECURE AKTIF</h3>
+          <p style="font-size: 12px; opacity: 0.8; max-width: 240px;">
+            Tangkapan layar (screenshot) dan perekaman video otomatis diblokir oleh sistem keamanan ujian.
+          </p>
+          <button style="margin-top:20px; background:#334155; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:11px; cursor:pointer;" onclick="hideScreenshotBlackout()">
+            Tutup Preview
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Control & Testing Panel -->
+    <div class="control-panel">
+      <h2><i class="fa-solid fa-sliders"></i> Panel Pengujian Keamanan</h2>
+      <p>Gunakan tombol di bawah ini untuk mensimulasikan perilaku mahasiswa di Android & iPhone saat ujian berlangsung:</p>
+
+      <div class="sim-buttons">
+        <button class="sim-btn" onclick="triggerSimulatedViolation()">
+          <div>
+            <strong>Simulasi Mahasiswa Pindah Aplikasi</strong><br>
+            <small style="color: #94a3b8;">Meniru aksi tekan tombol Home / Split Screen / Notifikasi</small>
+          </div>
+          <span class="badge">Uji Pelanggaran</span>
+        </button>
+
+        <button class="sim-btn" onclick="triggerScreenshotTest()">
+          <div>
+            <strong>Uji Anti-Screenshot (FLAG_SECURE)</strong><br>
+            <small style="color: #94a3b8;">Melihat hasil saat mahasiswa mencoba screenshot</small>
+          </div>
+          <span class="badge">Layar Hitam</span>
+        </button>
+
+        <button class="sim-btn" onclick="triggerDirectLock()">
+          <div>
+            <strong>Paksa Kunci Ujian (Max Violation)</strong><br>
+            <small style="color: #94a3b8;">Kunci ujian langsung yang butuh PIN Pengawas</small>
+          </div>
+          <span class="badge">Lockdown</span>
+        </button>
+
+        <button class="sim-btn" onclick="resetSimulator()">
+          <div>
+            <strong>Reset Sesi Ujian</strong><br>
+            <small style="color: #94a3b8;">Kembalikan pelanggaran ke 0 dan kembali ke Home</small>
+          </div>
+          <span class="badge">Reset</span>
+        </button>
+      </div>
+
+      <div class="log-box" id="simLog">
+        [SYSTEM] Elena SEB Simulator diinisialisasi.<br>
+        [INFO] Target: https://elena.nurulfikri.ac.id<br>
+        [INFO] Default PIN Pengawas: 194500
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let violationCount = 0;
+    const maxViolations = 3;
+    let proctorPin = "194500";
+    let pendingAction = null; // 'exit', 'unlock', 'settings'
+
+    function log(msg) {
+      const box = document.getElementById('simLog');
+      const time = new Date().toLocaleTimeString();
+      box.innerHTML += `[${time}] ${msg}<br>`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function startExam(url) {
+      showScreen('screenExam');
+      document.getElementById('examUrlDisplay').innerText = url.replace('https://', '');
+      log(`Mahasiswa memulai ujian: ${url}`);
+    }
+
+    function reloadExamFrame() {
+      const iframe = document.getElementById('examFrame');
+      iframe.src = iframe.src;
+      log('Halaman ujian dimuat ulang (Reload).');
+    }
+
+    function triggerSimulatedViolation() {
+      const examScreen = document.getElementById('screenExam');
+      if (!examScreen.classList.contains('active')) {
+        alert('Harap tekan tombol "MULAI UJIAN ELENA" terlebih dahulu di layar smartphone simulator!');
+        return;
+      }
+
+      violationCount++;
+      updateViolationUI();
+      log(`⚠️ Pelanggaran terdeteksi (${violationCount}/${maxViolations}): Mahasiswa meminimalkan layar / beralih aplikasi.`);
+
+      if (violationCount >= maxViolations) {
+        log('⛔ Batas pelanggaran tercapai! Ujian OTOMATIS TERKUNCI.');
+        pendingAction = 'unlock';
+        document.getElementById('proctorModalTitle').innerHTML = '<i class="fa-solid fa-lock" style="color:#dc2626;"></i> Ujian Terkunci!';
+        document.getElementById('proctorModalSubtitle').innerText = 'Ujian terkunci karena mencapai batas pelanggaran (3x). Diperlukan PIN Pengawas untuk membuka kembali.';
+        document.getElementById('btnCancelProctor').style.display = 'none';
+        document.getElementById('proctorModal').classList.add('active');
+      } else {
+        document.getElementById('violationWarningText').innerText = `Anda terdeteksi keluar dari aplikasi ujian (${violationCount}/${maxViolations} kali). Dilarang beralih aplikasi!`;
+        document.getElementById('violationWarningModal').classList.add('active');
+      }
+    }
+
+    function closeViolationWarning() {
+      document.getElementById('violationWarningModal').classList.remove('active');
+    }
+
+    function updateViolationUI() {
+      const badge = document.getElementById('violationBadge');
+      const text = document.getElementById('violationCountText');
+      text.innerText = `${violationCount}/${maxViolations}`;
+      if (violationCount > 0) {
+        badge.classList.add('danger');
+      } else {
+        badge.classList.remove('danger');
+      }
+    }
+
+    function requestExitExam() {
+      pendingAction = 'exit';
+      document.getElementById('proctorModalTitle').innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket" style="color:#dc2626;"></i> Keluar dari Ujian';
+      document.getElementById('proctorModalSubtitle').innerText = 'Masukkan PIN Pengawas untuk mengakhiri sesi ujian mahasiswa.';
+      document.getElementById('btnCancelProctor').style.display = 'block';
+      document.getElementById('proctorModal').classList.add('active');
+    }
+
+    function openSettingsModal() {
+      pendingAction = 'settings';
+      document.getElementById('proctorModalTitle').innerHTML = '<i class="fa-solid fa-gear" style="color:#0d47a1;"></i> Pengaturan Pengawas';
+      document.getElementById('proctorModalSubtitle').innerText = 'Masukkan PIN Pengawas untuk mengakses pengaturan aplikasi.';
+      document.getElementById('btnCancelProctor').style.display = 'block';
+      document.getElementById('proctorModal').classList.add('active');
+    }
+
+    function closeProctorModal() {
+      document.getElementById('proctorModal').classList.remove('active');
+      document.getElementById('inputProctorPin').value = '';
+      document.getElementById('pinErrorMsg').style.display = 'none';
+    }
+
+    function verifyProctorPin() {
+      const entered = document.getElementById('inputProctorPin').value.trim();
+      if (entered === proctorPin) {
+        log('✅ PIN Pengawas valid.');
+        closeProctorModal();
+        if (pendingAction === 'exit') {
+          log('Sesi ujian diakhiri oleh pengawas.');
+          resetSimulator();
+        } else if (pendingAction === 'unlock') {
+          log('Kunci ujian berhasil dibuka oleh pengawas.');
+          violationCount = 0;
+          updateViolationUI();
+          alert('Sesi ujian mahasiswa telah dibuka kembali oleh Pengawas!');
+        } else if (pendingAction === 'settings') {
+          const newPin = prompt('Masukkan PIN Pengawas Baru (saat ini: ' + proctorPin + '):', proctorPin);
+          if (newPin && newPin.trim().length >= 4) {
+            proctorPin = newPin.trim();
+            log(`PIN Pengawas berhasil diubah menjadi: ${proctorPin}`);
+            alert(`PIN Pengawas berhasil diubah menjadi: ${proctorPin}`);
+          }
+        }
+      } else {
+        document.getElementById('pinErrorMsg').style.display = 'block';
+        log('❌ Gagal: PIN Pengawas salah dimasukkan.');
+      }
+    }
+
+    function triggerScreenshotTest() {
+      const blackout = document.getElementById('blackoutOverlay');
+      blackout.classList.add('active');
+      log('📸 Simulasi Screenshot: Layar menjadi hitam pekat (FLAG_SECURE mencegah perekaman).');
+    }
+
+    function hideScreenshotBlackout() {
+      document.getElementById('blackoutOverlay').classList.remove('active');
+    }
+
+    function triggerDirectLock() {
+      violationCount = 3;
+      updateViolationUI();
+      triggerSimulatedViolation();
+    }
+
+    function openQrScanner() {
+      showScreen('screenQr');
+      log('Pemindai QR Code diaktifkan.');
+    }
+
+    function closeQrScanner() {
+      showScreen('screenHome');
+    }
+
+    function simulateQrDetection() {
+      const quizUrl = 'https://elena.nurulfikri.ac.id/mod/quiz/view.php?id=12345';
+      log(`QR Code kuis terdeteksi: ${quizUrl}`);
+      startExam(quizUrl);
+    }
+
+    function openCustomUrlDialog() {
+      const url = prompt('Masukkan URL Kuis Elena:', 'https://elena.nurulfikri.ac.id/mod/quiz/view.php?id=999');
+      if (url) {
+        startExam(url);
+      }
+    }
+
+    function resetSimulator() {
+      violationCount = 0;
+      updateViolationUI();
+      showScreen('screenHome');
+      log('Simulator di-reset ke kondisi awal.');
+    }
+  </script>
+</body>
+</html>
+

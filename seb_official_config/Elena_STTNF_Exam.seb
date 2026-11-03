@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>originatorVersion</key>
+	<string>SEB_Win_3.5.0</string>
+	<key>startURL</key>
+	<string>https://elena.nurulfikri.ac.id</string>
+	<key>allowQuit</key>
+	<true/>
+	<key>ignoreExitKeys</key>
+	<true/>
+	<key>hashedQuitPassword</key>
+	<!-- Default quit password is: 194500 -->
+	<string>3e4845dc6ebf44c73aa2debab0f29e143ff9e5431354ea172d58a861ca4af331</string>
+	<key>browserWindowAllowReload</key>
+	<true/>
+	<key>browserWindowShowURL</key>
+	<integer>0</integer>
+	<key>showTaskBar</key>
+	<true/>
+	<key>showReloadButton</key>
+	<true/>
+	<key>showTime</key>
+	<true/>
+	<key>showInputLanguage</key>
+	<false/>
+	<key>allowSpellCheck</key>
+	<false/>
+	<key>allowDictionaryLookup</key>
+	<false/>
+	<key>allowPrint</key>
+	<false/>
+	<key>allowScreenCapture</key>
+	<false/>
+	<key>allowAudioCapture</key>
+	<false/>
+	<key>allowVideoCapture</key>
+	<false/>
+	
+	<!-- iOS & Android Mobile Specific Policies -->
+	<key>mobileAllowScreenCapture</key>
+	<false/>
+	<key>mobileEnableGuidedAccess</key>
+	<true/>
+	<key>mobilePreventAutoLock</key>
+	<true/>
+	<key>mobileShowReloadButton</key>
+	<true/>
+	<key>mobileShowQuitButton</key>
+	<true/>
+	<key>mobileAllowSingleAppMode</key>
+	<true/>
+
+	<!-- URL Filtering (Strict Lockdown to Elena) -->
+	<key>enableURLFilter</key>
+	<true/>
+	<key>urlFilterEnableContentFilter</key>
+	<false/>
+	<key>urlFilterRules</key>
+	<array>
+		<dict>
+			<key>active</key>
+			<true/>
+			<key>action</key>
+			<integer>1</integer>
+			<key>rule</key>
+			<string>*elena.nurulfikri.ac.id*</string>
+		</dict>
+		<dict>
+			<key>active</key>
+			<true/>
+			<key>action</key>
+			<integer>1</integer>
+			<key>rule</key>
+			<string>*accounts.google.com*</string>
+		</dict>
+	</array>
+
+	<key>sendBrowserExamKey</key>
+	<true/>
+	<key>examKeySalt</key>
+	<data>
+	</data>
+</dict>
+</plist>
+
