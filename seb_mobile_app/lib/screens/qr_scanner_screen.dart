@@ -20,6 +20,12 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   
   final SecurityService _securityService = SecurityService();
   bool _isProcessing = false;
+  bool _isTorchOn = false;
+
+  void _toggleTorch() {
+    setState(() => _isTorchOn = !_isTorchOn);
+    _scannerController.toggleTorch();
+  }
 
   void _onDetect(BarcodeCapture capture) {
     if (_isProcessing) return;
@@ -109,18 +115,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         ),
         actions: [
           IconButton(
-            icon: ValueListenableBuilder<TorchState>(
-              valueListenable: _scannerController.torchState,
-              builder: (context, state, child) {
-                switch (state) {
-                  case TorchState.off:
-                    return const Icon(Icons.flash_off_rounded, color: Colors.white70);
-                  case TorchState.on:
-                    return const Icon(Icons.flash_on_rounded, color: AppConstants.accentGold);
-                }
-              },
+            icon: Icon(
+              _isTorchOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
+              color: _isTorchOn ? AppConstants.accentGold : Colors.white70,
             ),
-            onPressed: () => _scannerController.toggleTorch(),
+            onPressed: _toggleTorch,
           ),
           IconButton(
             icon: const Icon(Icons.flip_camera_ios_rounded, color: Colors.white70),
